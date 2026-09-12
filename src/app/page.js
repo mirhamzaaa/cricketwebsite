@@ -1,0 +1,74 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
+
+export default function IntroPage() {
+  const router = useRouter()
+
+  // 👇 YAHAN APNI DETAILS DAALO 👇
+  const developerName = 'YOUR NAME HERE'
+  const developerBio = 'YOUR BIO / TAGLINE HERE'
+  const developerPhoto = ''
+  const instagramLink = 'https://instagram.com/yourusername'
+  const whatsappLink = 'https://wa.me/923xxxxxxxxx'
+  const githubLink = 'https://github.com/yourusername'
+  // 👆 YAHAN TAK 👆
+
+  return (
+    <main style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontFamily: 'Arial',
+      backgroundColor: '#111',
+      color: 'white',
+      padding: '20px',
+      textAlign: 'center',
+    }}>
+      {developerPhoto ? (
+        <img
+          src={developerPhoto}
+          alt={developerName}
+          style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px', border: '3px solid #0070f3' }}
+        />
+      ) : (
+        <div style={{ width: '120px', height: '120px', borderRadius: '50%', backgroundColor: '#333', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>
+          👤
+        </div>
+      )}
+
+      <h1 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px' }}>{developerName}</h1>
+      <p style={{ fontSize: '16px', color: '#ccc', marginBottom: '20px', maxWidth: '400px' }}>{developerBio}</p>
+
+      <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
+        <a href={instagramLink} target="_blank" rel="noopener noreferrer" style={{ color: '#e1306c', fontSize: '14px', textDecoration: 'none' }}>
+          Instagram
+        </a>
+        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" style={{ color: '#25d366', fontSize: '14px', textDecoration: 'none' }}>
+          WhatsApp
+        </a>
+        <a href={githubLink} target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', fontSize: '14px', textDecoration: 'none' }}>
+          GitHub
+        </a>
+      </div>
+
+      <button
+        onClick={() => router.push('/home')}
+        style={{
+          padding: '14px 40px',
+          backgroundColor: '#0070f3',
+          color: 'white',
+          border: 'none',
+          borderRadius: '30px',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+        }}
+      >
+        Enter Website →
+      </button>
+    </main>
+  )
+}
