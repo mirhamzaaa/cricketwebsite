@@ -26,7 +26,7 @@ export default function IntroPage() {
       <img
         src={developerPhoto}
         alt={developerName}
-        style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px', border: '3px solid #0070f3' }}
+        style={{ width: '180px', height: 'auto', maxHeight: '220px', borderRadius: '16px', objectFit: 'contain', marginBottom: '20px', border: '3px solid #0070f3' }}
       />
 
       <h1 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px' }}>{developerName}</h1>
