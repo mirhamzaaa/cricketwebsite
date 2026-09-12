@@ -5,14 +5,10 @@ import { useRouter } from 'next/navigation'
 export default function IntroPage() {
   const router = useRouter()
 
-  // 👇 YAHAN APNI DETAILS DAALO 👇
-  const developerName = 'YOUR NAME HERE'
-  const developerBio = 'YOUR BIO / TAGLINE HERE'
-  const developerPhoto = ''
-  const instagramLink = 'https://instagram.com/yourusername'
-  const whatsappLink = 'https://wa.me/923xxxxxxxxx'
-  const githubLink = 'https://github.com/yourusername'
-  // 👆 YAHAN TAK 👆
+  const developerName = 'Mir Hamza Manzoor'
+  const developerBio = 'Full Stack Developer & IT Boy'
+  const developerPhoto = 'https://nepjpcxwowmalqwkjiee.supabase.co/storage/v1/object/sign/hamza%20photo/IMG-20250904-WA0010.jpg?token=eyJraWQiOiIyNDNjMTQ1Yy1lZDdjLTQyMjItYTc1OS0yMThlYjYxMDJhNzUiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJoYW16YSBwaG90by9JTUctMjAyNTA5MDQtV0EwMDEwLmpwZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODkyMjcyODUsImV4cCI6MTgyMDc2MzI4NX0.avhdNxS1PDCwUR9cnrQPNJUTGMp5crUhO4eXKlVRs3veppq2cwqiMRwhKJVysiiI3AW-SnYDUOcP_XBCW6VUaQ'
+  const whatsappLink = 'https://wa.me/923558396496'
 
   return (
     <main style={{
@@ -27,30 +23,18 @@ export default function IntroPage() {
       padding: '20px',
       textAlign: 'center',
     }}>
-      {developerPhoto ? (
-        <img
-          src={developerPhoto}
-          alt={developerName}
-          style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px', border: '3px solid #0070f3' }}
-        />
-      ) : (
-        <div style={{ width: '120px', height: '120px', borderRadius: '50%', backgroundColor: '#333', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>
-          👤
-        </div>
-      )}
+      <img
+        src={developerPhoto}
+        alt={developerName}
+        style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px', border: '3px solid #0070f3' }}
+      />
 
       <h1 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px' }}>{developerName}</h1>
       <p style={{ fontSize: '16px', color: '#ccc', marginBottom: '20px', maxWidth: '400px' }}>{developerBio}</p>
 
       <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
-        <a href={instagramLink} target="_blank" rel="noopener noreferrer" style={{ color: '#e1306c', fontSize: '14px', textDecoration: 'none' }}>
-          Instagram
-        </a>
         <a href={whatsappLink} target="_blank" rel="noopener noreferrer" style={{ color: '#25d366', fontSize: '14px', textDecoration: 'none' }}>
           WhatsApp
-        </a>
-        <a href={githubLink} target="_blank" rel="noopener noreferrer" style={{ color: '#ccc', fontSize: '14px', textDecoration: 'none' }}>
-          GitHub
         </a>
       </div>
 
