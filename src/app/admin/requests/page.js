@@ -7,6 +7,10 @@ import { supabase } from '@/lib/supabase'
 export default function MatchRequestsPage() {
   const [requests, setRequests] = useState([])
   const [loading, setLoading] = useState(true)
+  const [acceptingId, setAcceptingId] = useState(null)
+  const [venue, setVenue] = useState('')
+  const [overs, setOvers] = useState('')
+  const [matchFee, setMatchFee] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -30,6 +34,56 @@ export default function MatchRequestsPage() {
 
     if (!error) setRequests(data)
     setLoading(false)
+  }
+
+  function startAccepting(id) {
+    setAcceptingId(id)
+    setVenue('')
+    setOvers('')
+    setMatchFee('')
+  }
+
+  function cancelAccepting() {
+    setAcceptingId(null)
+  }
+
+  async function confirmAccept(request) {
+    if (!venue) {
+      alert('Please enter a venue')
+      return
+    }
+
+    const { error: reqError } = await supabase
+      .from('match_requests')
+      .update({ status: 'ACCEPTED' })
+      .eq('id', request.id)
+
+    if (reqError) {
+      alert('Error updating request: ' + reqError.message)
+      return
+    }
+
+    const { error: matchError } = await supabase.from('matches').insert([
+      {
+        request_id: request.id,
+        opponent_team_name: request.opponent_team_name,
+        match_date: request.proposed_date,
+        match_time: request.proposed_time,
+        venue: venue,
+        overs: overs,
+        match_fee: matchFee,
+        status: 'SCHEDULED',
+      },
+    ])
+
+    if (matchError) {
+      alert('Error creating match: ' + matchError.message)
+      return
+    }
+
+    alert('Match scheduled successfully!')
+    setAcceptingId(null)
+    fetchRequests()
   }
 
   async function updateStatus(id, status) {
@@ -73,6 +127,8 @@ export default function MatchRequestsPage() {
     return <p style={{ padding: '40px', fontFamily: 'Arial' }}>Loading...</p>
   }
 
+  const inputStyle = { width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', backgroundColor: 'white', color: 'black' }
+
   return (
     <main style={{ padding: '40px', fontFamily: 'Arial', maxWidth: '800px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -115,30 +171,58 @@ export default function MatchRequestsPage() {
               </p>
             )}
 
-            <div style={{ marginTop: '12px' }}>
-              {req.status !== 'ACCEPTED' && (
+            {acceptingId === req.id ? (
+              <div style={{ marginTop: '15px', padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+                <h4 style={{ marginBottom: '10px' }}>Enter Match Details</h4>
+
+                <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Venue *</label>
+                <input type="text" value={venue} onChange={(e) => setVenue(e.target.value)} style={inputStyle} placeholder="e.g. City Cricket Ground" />
+
+                <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Overs</label>
+                <input type="number" value={overs} onChange={(e) => setOvers(e.target.value)} style={inputStyle} placeholder="e.g. 20" />
+
+                <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Match Fee</label>
+                <input type="text" value={matchFee} onChange={(e) => setMatchFee(e.target.value)} style={inputStyle} placeholder="e.g. Rs. 5000" />
+
                 <button
-                  onClick={() => updateStatus(req.id, 'ACCEPTED')}
-                  style={{ padding: '6px 14px', marginRight: '8px', backgroundColor: '#0a0', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+                  onClick={() => confirmAccept(req)}
+                  style={{ padding: '8px 16px', marginRight: '8px', backgroundColor: '#0a0', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
                 >
-                  Accept
+                  Confirm & Schedule Match
                 </button>
-              )}
-              {req.status !== 'REJECTED' && (
                 <button
-                  onClick={() => updateStatus(req.id, 'REJECTED')}
-                  style={{ padding: '6px 14px', marginRight: '8px', backgroundColor: '#e00', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+                  onClick={cancelAccepting}
+                  style={{ padding: '8px 16px', backgroundColor: '#999', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
                 >
-                  Reject
+                  Cancel
                 </button>
-              )}
-              <button
-                onClick={() => handleDelete(req.id)}
-                style={{ padding: '6px 14px', backgroundColor: '#999', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-              >
-                Delete
-              </button>
-            </div>
+              </div>
+            ) : (
+              <div style={{ marginTop: '12px' }}>
+                {req.status !== 'ACCEPTED' && (
+                  <button
+                    onClick={() => startAccepting(req.id)}
+                    style={{ padding: '6px 14px', marginRight: '8px', backgroundColor: '#0a0', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+                  >
+                    Accept
+                  </button>
+                )}
+                {req.status !== 'REJECTED' && (
+                  <button
+                    onClick={() => updateStatus(req.id, 'REJECTED')}
+                    style={{ padding: '6px 14px', marginRight: '8px', backgroundColor: '#e00', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+                  >
+                    Reject
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDelete(req.id)}
+                  style={{ padding: '6px 14px', backgroundColor: '#999', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         ))
       )}
