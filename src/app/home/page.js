@@ -20,8 +20,8 @@ export default function HomePage() {
   const [coaches, setCoaches] = useState([])
   const [nextMatch, setNextMatch] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState(null) // null = nothing open, 'team' | 'coaches'
-  const [squadView, setSquadView] = useState('Playing XI') // sub-tab inside Team
+  const [activeTab, setActiveTab] = useState(null)
+  const [squadView, setSquadView] = useState('Playing XI')
 
   useEffect(() => {
     fetchData()
@@ -89,11 +89,9 @@ export default function HomePage() {
       color: colors.text,
       fontFamily: "'Segoe UI', Arial, sans-serif",
     }}>
-      {/* subtle stadium floodlight glows */}
       <div style={{ position: 'absolute', top: '-100px', left: '10%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%)', filter: 'blur(10px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', top: '-100px', right: '10%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%)', filter: 'blur(10px)', pointerEvents: 'none' }} />
 
-      {/* Navbar */}
       <nav style={{
         position: 'sticky', top: 0, zIndex: 10,
         background: 'rgba(5,13,9,0.75)', backdropFilter: 'blur(10px)',
@@ -119,7 +117,6 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero */}
       <div style={{ textAlign: 'center', padding: '70px 20px 50px', position: 'relative' }}>
         <div style={{ fontSize: '46px' }}>🏏</div>
         <h1 style={{ fontSize: '38px', fontWeight: 'bold', margin: '10px 0 4px' }}>{TEAM_NAME}</h1>
@@ -144,7 +141,6 @@ export default function HomePage() {
         <p style={{ textAlign: 'center', padding: '40px', color: colors.muted }}>Loading...</p>
       ) : (
         <>
-          {/* Team Section */}
           {activeTab === 'team' && (
             <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '10px 20px 60px', position: 'relative' }}>
               <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', justifyContent: 'center' }}>
@@ -182,7 +178,6 @@ export default function HomePage() {
             </section>
           )}
 
-          {/* Coaches Section */}
           {activeTab === 'coaches' && (
             <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '10px 20px 60px' }}>
               {coaches.length === 0 ? (
