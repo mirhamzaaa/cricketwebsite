@@ -1,211 +1,108 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
-const TEAM_NAME = 'Legends Stars Jura'
-const TEAM_TAGLINE = 'Cricket Team'
-const TEAM_LOGO_URL = ''
+export default function IntroPage() {
+  const router = useRouter()
 
-const colors = {
-  bg: '#F8F7FF',
-  purple: '#7C3AED',
-  darkBlue: '#1E1B4B',
-  pink: '#EC4899',
-  blue: '#3B82F6',
-  text: '#1E1B4B',
-  muted: '#6B7280',
-  white: '#FFFFFF',
-}
-
-const gradient = `linear-gradient(135deg, ${colors.purple}, ${colors.pink})`
-
-export default function HomePage() {
-  const [players, setPlayers] = useState([])
-  const [coaches, setCoaches] = useState([])
-  const [nextMatch, setNextMatch] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState(null)
-  const [squadView, setSquadView] = useState('Playing XI')
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  async function fetchData() {
-    const [playersRes, coachesRes, matchesRes] = await Promise.all([
-      supabase.from('players').select('*').order('jersey_number', { ascending: true }),
-      supabase.from('coaches').select('*'),
-      supabase.from('matches').select('*').eq('status', 'SCHEDULED').order('match_date', { ascending: true }).limit(1),
-    ])
-
-    if (!playersRes.error) setPlayers(playersRes.data)
-    if (!coachesRes.error) setCoaches(coachesRes.data)
-    if (!matchesRes.error && matchesRes.data.length > 0) setNextMatch(matchesRes.data[0])
-    setLoading(false)
-  }
-
-  const playingXI = players.filter(p => p.squad_status === 'Playing XI')
-  const squad = players.filter(p => p.squad_status !== 'Playing XI')
-  const shownPlayers = squadView === 'Playing XI' ? playingXI : squad
-
-  const card = {
-    background: colors.white,
-    borderRadius: '18px',
-    padding: '18px',
-    textAlign: 'center',
-    boxShadow: '0 4px 20px rgba(124, 58, 237, 0.08)',
-    border: '1px solid rgba(124, 58, 237, 0.08)',
-  }
-
-  const navLink = { color: colors.text, textDecoration: 'none', fontSize: '14px', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }
-
-  function toggleTab(tab) {
-    setActiveTab(activeTab === tab ? null : tab)
-  }
-
-  function PlayerCard({ player }) {
-    return (
-      <div style={card}>
-        {player.photo_url ? (
-          <img src={player.photo_url} alt={player.name} style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 10px', display: 'block', border: `3px solid transparent`, backgroundImage: gradient, backgroundOrigin: 'border-box', backgroundClip: 'content-box, border-box' }} />
-        ) : (
-          <div style={{ width: '76px', height: '76px', borderRadius: '50%', background: gradient, margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🏏</div>
-        )}
-        <p style={{ fontWeight: 'bold', fontSize: '15px', margin: '4px 0 2px', color: colors.darkBlue }}>{player.name} {player.is_captain && '👑'}</p>
-        <p style={{ fontSize: '13px', color: colors.muted, margin: 0 }}>{player.role || 'N/A'} {player.jersey_number ? `· #${player.jersey_number}` : ''}</p>
-      </div>
-    )
-  }
+  const developerName = 'Mir Hamza Manzoor'
+  const developerBio = 'Full Stack Developer & IT Boy'
+  const developerPhoto = 'https://nepjpcxwowmalqwkjiee.supabase.co/storage/v1/object/sign/hamza%20photo/IMG-20250904-WA0010.jpg?token=eyJraWQiOiIyNDNjMTQ1Yy1lZDdjLTQyMjItYTc1OS0yMThlYjYxMDJhNzUiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJoYW16YSBwaG90by9JTUctMjAyNTA5MDQtV0EwMDEwLmpwZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODkyMjcyODUsImV4cCI6MTgyMDc2MzI4NX0.avhdNxS1PDCwUR9cnrQPNJUTGMp5crUhO4eXKlVRs3veppq2cwqiMRwhKJVysiiI3AW-SnYDUOcP_XBCW6VUaQ'
+  const whatsappLink = 'https://wa.me/923558396496'
 
   return (
-    <main style={{
-      minHeight: '100vh',
-      background: `
-        radial-gradient(circle at 10% 10%, rgba(124,58,237,0.08), transparent 40%),
-        radial-gradient(circle at 90% 20%, rgba(236,72,153,0.08), transparent 40%),
-        radial-gradient(circle at 50% 90%, rgba(59,130,246,0.06), transparent 50%),
-        ${colors.bg}
-      `,
-      color: colors.text,
-      fontFamily: "'Segoe UI', Arial, sans-serif",
-    }}>
-      {/* Navbar */}
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 10,
-        background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(10px)',
-        padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        borderBottom: '1px solid rgba(124,58,237,0.1)', flexWrap: 'wrap', gap: '10px',
+    <>
+      <style>{`
+        @keyframes floatBlob {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(30px, -30px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(24px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); }
+          50% { box-shadow: 0 0 0 14px rgba(124,58,237,0); }
+        }
+        .fade-1 { animation: fadeSlideUp 0.7s ease both; animation-delay: 0.1s; }
+        .fade-2 { animation: fadeSlideUp 0.7s ease both; animation-delay: 0.3s; }
+        .fade-3 { animation: fadeSlideUp 0.7s ease both; animation-delay: 0.5s; }
+        .fade-4 { animation: fadeSlideUp 0.7s ease both; animation-delay: 0.7s; }
+        .enter-btn { transition: transform 0.2s ease; animation: pulseGlow 2.4s infinite; }
+        .enter-btn:hover { transform: scale(1.06); }
+        .blob { position: absolute; border-radius: 50%; filter: blur(50px); animation: floatBlob 10s ease-in-out infinite; }
+      `}</style>
+
+      <main style={{
+        minHeight: '100vh',
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontFamily: "'Segoe UI', Arial, sans-serif",
+        background: '#F8F7FF',
+        padding: '20px',
+        textAlign: 'center',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {TEAM_LOGO_URL ? (
-            <img src={TEAM_LOGO_URL} alt={TEAM_NAME} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }} />
-          ) : (
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: gradient, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🏏</div>
-          )}
-          <span style={{ fontWeight: 'bold', fontSize: '16px', color: colors.darkBlue }}>{TEAM_NAME}</span>
+        <div className="blob" style={{ width: '260px', height: '260px', background: '#7C3AED', opacity: 0.25, top: '-60px', left: '-60px' }} />
+        <div className="blob" style={{ width: '300px', height: '300px', background: '#EC4899', opacity: 0.2, bottom: '-80px', right: '-60px', animationDelay: '2s' }} />
+        <div className="blob" style={{ width: '200px', height: '200px', background: '#3B82F6', opacity: 0.2, top: '40%', right: '10%', animationDelay: '4s' }} />
+
+        <img
+          className="fade-1"
+          src={developerPhoto}
+          alt={developerName}
+          style={{
+            position: 'relative', zIndex: 1,
+            width: '130px', height: '130px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 20%',
+            marginBottom: '22px', border: '4px solid white',
+            boxShadow: '0 8px 30px rgba(124,58,237,0.25)',
+          }}
+        />
+
+        <h1 className="fade-2" style={{ position: 'relative', zIndex: 1, fontSize: '30px', fontWeight: 'bold', margin: '0 0 8px', color: '#1E1B4B' }}>
+          {developerName}
+        </h1>
+
+        <p className="fade-3" style={{
+          position: 'relative', zIndex: 1,
+          background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+          fontSize: '15px', fontWeight: 'bold', marginBottom: '24px', maxWidth: '360px',
+        }}>
+          {developerBio}
+        </p>
+
+        <div className="fade-3" style={{ position: 'relative', zIndex: 1, marginBottom: '34px' }}>
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" style={{
+            color: '#25d366', fontSize: '14px', textDecoration: 'none', fontWeight: 'bold',
+          }}>
+            💬 WhatsApp
+          </a>
         </div>
 
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <button onClick={() => toggleTab('team')} style={{ ...navLink, color: activeTab === 'team' ? colors.purple : colors.text }}>Team</button>
-          <button onClick={() => toggleTab('coaches')} style={{ ...navLink, color: activeTab === 'coaches' ? colors.purple : colors.text }}>Coaches</button>
-          <a href="/matches" style={navLink}>Matches</a>
-          <a href="/request-match" style={{
-            background: gradient, color: 'white', padding: '8px 18px', borderRadius: '20px', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px'
-          }}>Request a Match</a>
-        </div>
-      </nav>
-
-      {/* Hero */}
-      <div style={{ textAlign: 'center', padding: '70px 20px 50px' }}>
-        <div style={{ fontSize: '46px' }}>🏏</div>
-        <h1 style={{ fontSize: '38px', fontWeight: 'bold', margin: '10px 0 4px', color: colors.darkBlue }}>{TEAM_NAME}</h1>
-        <p style={{
-          background: gradient, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          letterSpacing: '1px', fontSize: '15px', fontWeight: 'bold',
-        }}>{TEAM_TAGLINE}</p>
-
-        {nextMatch && (
-          <div style={{ ...card, maxWidth: '360px', margin: '30px auto 0' }}>
-            <p style={{ fontSize: '12px', color: colors.purple, letterSpacing: '1px', margin: '0 0 8px', fontWeight: 'bold' }}>NEXT MATCH</p>
-            <p style={{ fontWeight: 'bold', fontSize: '17px', margin: '0 0 4px', color: colors.darkBlue }}>vs {nextMatch.opponent_team_name}</p>
-            <p style={{ fontSize: '13px', color: colors.muted, margin: 0 }}>{nextMatch.match_date} · {nextMatch.venue}</p>
-          </div>
-        )}
-
-        {!activeTab && (
-          <p style={{ color: colors.muted, fontSize: '13px', marginTop: '24px' }}>
-            Tap <strong style={{ color: colors.purple }}>Team</strong> or <strong style={{ color: colors.pink }}>Coaches</strong> above to explore
-          </p>
-        )}
-      </div>
-
-      {loading ? (
-        <p style={{ textAlign: 'center', padding: '40px', color: colors.muted }}>Loading...</p>
-      ) : (
-        <>
-          {activeTab === 'team' && (
-            <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '10px 20px 60px' }}>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', justifyContent: 'center' }}>
-                <button
-                  onClick={() => setSquadView('Playing XI')}
-                  style={{
-                    padding: '8px 20px', borderRadius: '20px', border: 'none',
-                    background: squadView === 'Playing XI' ? gradient : colors.white,
-                    color: squadView === 'Playing XI' ? 'white' : colors.purple,
-                    cursor: 'pointer', fontWeight: 'bold', fontSize: '13px',
-                    boxShadow: '0 2px 8px rgba(124,58,237,0.15)',
-                  }}
-                >
-                  Playing XI
-                </button>
-                <button
-                  onClick={() => setSquadView('Squad')}
-                  style={{
-                    padding: '8px 20px', borderRadius: '20px', border: 'none',
-                    background: squadView === 'Squad' ? gradient : colors.white,
-                    color: squadView === 'Squad' ? 'white' : colors.purple,
-                    cursor: 'pointer', fontWeight: 'bold', fontSize: '13px',
-                    boxShadow: '0 2px 8px rgba(124,58,237,0.15)',
-                  }}
-                >
-                  Full Squad
-                </button>
-              </div>
-
-              {shownPlayers.length === 0 ? (
-                <p style={{ color: colors.muted, textAlign: 'center' }}>No players in this list yet.</p>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '18px' }}>
-                  {shownPlayers.map((p) => <PlayerCard key={p.id} player={p} />)}
-                </div>
-              )}
-            </section>
-          )}
-
-          {activeTab === 'coaches' && (
-            <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '10px 20px 60px' }}>
-              {coaches.length === 0 ? (
-                <p style={{ color: colors.muted, textAlign: 'center' }}>No coaches added yet.</p>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '18px' }}>
-                  {coaches.map((c) => (
-                    <div key={c.id} style={card}>
-                      {c.photo_url ? (
-                        <img src={c.photo_url} alt={c.name} style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 10px', display: 'block' }} />
-                      ) : (
-                        <div style={{ width: '76px', height: '76px', borderRadius: '50%', background: gradient, margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🧑‍🏫</div>
-                      )}
-                      <p style={{ fontWeight: 'bold', fontSize: '15px', margin: '4px 0 2px', color: colors.darkBlue }}>{c.name}</p>
-                      <p style={{ fontSize: '13px', color: colors.muted, margin: 0 }}>{c.role || 'N/A'}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-          )}
-        </>
-      )}
-    </main>
+        <button
+          className="fade-4 enter-btn"
+          onClick={() => router.push('/home')}
+          style={{
+            position: 'relative', zIndex: 1,
+            padding: '15px 42px',
+            background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '30px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+          }}
+        >
+          Enter Website →
+        </button>
+      </main>
+    </>
   )
 }
