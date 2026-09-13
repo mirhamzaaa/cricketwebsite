@@ -8,12 +8,17 @@ const TEAM_TAGLINE = 'Cricket Team'
 const TEAM_LOGO_URL = ''
 
 const colors = {
-  bg1: '#050D09',
-  bg2: '#0F2A1E',
-  gold: '#C9A24B',
-  text: '#F2F1EA',
-  muted: '#9CA8A0',
+  bg: '#F8F7FF',
+  purple: '#7C3AED',
+  darkBlue: '#1E1B4B',
+  pink: '#EC4899',
+  blue: '#3B82F6',
+  text: '#1E1B4B',
+  muted: '#6B7280',
+  white: '#FFFFFF',
 }
+
+const gradient = `linear-gradient(135deg, ${colors.purple}, ${colors.pink})`
 
 export default function HomePage() {
   const [players, setPlayers] = useState([])
@@ -44,17 +49,16 @@ export default function HomePage() {
   const squad = players.filter(p => p.squad_status !== 'Playing XI')
   const shownPlayers = squadView === 'Playing XI' ? playingXI : squad
 
-  const glassCard = {
-    background: 'rgba(255,255,255,0.05)',
-    backdropFilter: 'blur(14px)',
-    WebkitBackdropFilter: 'blur(14px)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '14px',
+  const card = {
+    background: colors.white,
+    borderRadius: '18px',
     padding: '18px',
     textAlign: 'center',
+    boxShadow: '0 4px 20px rgba(124, 58, 237, 0.08)',
+    border: '1px solid rgba(124, 58, 237, 0.08)',
   }
 
-  const navLink = { color: colors.text, textDecoration: 'none', fontSize: '14px', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }
+  const navLink = { color: colors.text, textDecoration: 'none', fontSize: '14px', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }
 
   function toggleTab(tab) {
     setActiveTab(activeTab === tab ? null : tab)
@@ -62,13 +66,13 @@ export default function HomePage() {
 
   function PlayerCard({ player }) {
     return (
-      <div style={glassCard}>
+      <div style={card}>
         {player.photo_url ? (
-          <img src={player.photo_url} alt={player.name} style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 10px', display: 'block', border: `2px solid ${colors.gold}` }} />
+          <img src={player.photo_url} alt={player.name} style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 10px', display: 'block', border: `3px solid transparent`, backgroundImage: gradient, backgroundOrigin: 'border-box', backgroundClip: 'content-box, border-box' }} />
         ) : (
-          <div style={{ width: '76px', height: '76px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🏏</div>
+          <div style={{ width: '76px', height: '76px', borderRadius: '50%', background: gradient, margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🏏</div>
         )}
-        <p style={{ fontWeight: 'bold', fontSize: '15px', margin: '4px 0 2px' }}>{player.name} {player.is_captain && '👑'}</p>
+        <p style={{ fontWeight: 'bold', fontSize: '15px', margin: '4px 0 2px', color: colors.darkBlue }}>{player.name} {player.is_captain && '👑'}</p>
         <p style={{ fontSize: '13px', color: colors.muted, margin: 0 }}>{player.role || 'N/A'} {player.jersey_number ? `· #${player.jersey_number}` : ''}</p>
       </div>
     )
@@ -77,62 +81,61 @@ export default function HomePage() {
   return (
     <main style={{
       minHeight: '100vh',
-      position: 'relative',
-      overflow: 'hidden',
       background: `
-        radial-gradient(ellipse 500px 300px at 20% 0%, rgba(255,255,255,0.14), transparent 60%),
-        radial-gradient(ellipse 500px 300px at 80% 0%, rgba(255,255,255,0.12), transparent 60%),
-        radial-gradient(ellipse 700px 400px at 50% 100%, rgba(201,162,75,0.10), transparent 65%),
-        radial-gradient(circle at 50% 40%, rgba(201,162,75,0.05), transparent 70%),
-        linear-gradient(180deg, ${colors.bg1} 0%, ${colors.bg2} 45%, ${colors.bg1} 100%)
+        radial-gradient(circle at 10% 10%, rgba(124,58,237,0.08), transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(236,72,153,0.08), transparent 40%),
+        radial-gradient(circle at 50% 90%, rgba(59,130,246,0.06), transparent 50%),
+        ${colors.bg}
       `,
       color: colors.text,
       fontFamily: "'Segoe UI', Arial, sans-serif",
     }}>
-      <div style={{ position: 'absolute', top: '-100px', left: '10%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%)', filter: 'blur(10px)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', top: '-100px', right: '10%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%)', filter: 'blur(10px)', pointerEvents: 'none' }} />
-
+      {/* Navbar */}
       <nav style={{
         position: 'sticky', top: 0, zIndex: 10,
-        background: 'rgba(5,13,9,0.75)', backdropFilter: 'blur(10px)',
+        background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(10px)',
         padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        borderBottom: '1px solid rgba(255,255,255,0.08)', flexWrap: 'wrap', gap: '10px',
+        borderBottom: '1px solid rgba(124,58,237,0.1)', flexWrap: 'wrap', gap: '10px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {TEAM_LOGO_URL ? (
             <img src={TEAM_LOGO_URL} alt={TEAM_NAME} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }} />
           ) : (
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🏏</div>
+            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: gradient, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🏏</div>
           )}
-          <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{TEAM_NAME}</span>
+          <span style={{ fontWeight: 'bold', fontSize: '16px', color: colors.darkBlue }}>{TEAM_NAME}</span>
         </div>
 
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <button onClick={() => toggleTab('team')} style={{ ...navLink, color: activeTab === 'team' ? colors.gold : colors.text }}>Team</button>
-          <button onClick={() => toggleTab('coaches')} style={{ ...navLink, color: activeTab === 'coaches' ? colors.gold : colors.text }}>Coaches</button>
+          <button onClick={() => toggleTab('team')} style={{ ...navLink, color: activeTab === 'team' ? colors.purple : colors.text }}>Team</button>
+          <button onClick={() => toggleTab('coaches')} style={{ ...navLink, color: activeTab === 'coaches' ? colors.purple : colors.text }}>Coaches</button>
           <a href="/matches" style={navLink}>Matches</a>
           <a href="/request-match" style={{
-            background: colors.gold, color: '#111', padding: '8px 18px', borderRadius: '20px', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px'
+            background: gradient, color: 'white', padding: '8px 18px', borderRadius: '20px', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px'
           }}>Request a Match</a>
         </div>
       </nav>
 
-      <div style={{ textAlign: 'center', padding: '70px 20px 50px', position: 'relative' }}>
+      {/* Hero */}
+      <div style={{ textAlign: 'center', padding: '70px 20px 50px' }}>
         <div style={{ fontSize: '46px' }}>🏏</div>
-        <h1 style={{ fontSize: '38px', fontWeight: 'bold', margin: '10px 0 4px' }}>{TEAM_NAME}</h1>
-        <p style={{ color: colors.gold, letterSpacing: '1px', fontSize: '15px' }}>{TEAM_TAGLINE}</p>
+        <h1 style={{ fontSize: '38px', fontWeight: 'bold', margin: '10px 0 4px', color: colors.darkBlue }}>{TEAM_NAME}</h1>
+        <p style={{
+          background: gradient, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+          letterSpacing: '1px', fontSize: '15px', fontWeight: 'bold',
+        }}>{TEAM_TAGLINE}</p>
 
         {nextMatch && (
-          <div style={{ ...glassCard, maxWidth: '360px', margin: '30px auto 0' }}>
-            <p style={{ fontSize: '12px', color: colors.gold, letterSpacing: '1px', margin: '0 0 8px' }}>NEXT MATCH</p>
-            <p style={{ fontWeight: 'bold', fontSize: '17px', margin: '0 0 4px' }}>vs {nextMatch.opponent_team_name}</p>
+          <div style={{ ...card, maxWidth: '360px', margin: '30px auto 0' }}>
+            <p style={{ fontSize: '12px', color: colors.purple, letterSpacing: '1px', margin: '0 0 8px', fontWeight: 'bold' }}>NEXT MATCH</p>
+            <p style={{ fontWeight: 'bold', fontSize: '17px', margin: '0 0 4px', color: colors.darkBlue }}>vs {nextMatch.opponent_team_name}</p>
             <p style={{ fontSize: '13px', color: colors.muted, margin: 0 }}>{nextMatch.match_date} · {nextMatch.venue}</p>
           </div>
         )}
 
         {!activeTab && (
           <p style={{ color: colors.muted, fontSize: '13px', marginTop: '24px' }}>
-            Tap <strong style={{ color: colors.gold }}>Team</strong> or <strong style={{ color: colors.gold }}>Coaches</strong> above to explore
+            Tap <strong style={{ color: colors.purple }}>Team</strong> or <strong style={{ color: colors.pink }}>Coaches</strong> above to explore
           </p>
         )}
       </div>
@@ -142,15 +145,16 @@ export default function HomePage() {
       ) : (
         <>
           {activeTab === 'team' && (
-            <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '10px 20px 60px', position: 'relative' }}>
+            <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '10px 20px 60px' }}>
               <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', justifyContent: 'center' }}>
                 <button
                   onClick={() => setSquadView('Playing XI')}
                   style={{
-                    padding: '8px 20px', borderRadius: '20px', border: `1px solid ${colors.gold}`,
-                    background: squadView === 'Playing XI' ? colors.gold : 'transparent',
-                    color: squadView === 'Playing XI' ? '#111' : colors.gold,
+                    padding: '8px 20px', borderRadius: '20px', border: 'none',
+                    background: squadView === 'Playing XI' ? gradient : colors.white,
+                    color: squadView === 'Playing XI' ? 'white' : colors.purple,
                     cursor: 'pointer', fontWeight: 'bold', fontSize: '13px',
+                    boxShadow: '0 2px 8px rgba(124,58,237,0.15)',
                   }}
                 >
                   Playing XI
@@ -158,10 +162,11 @@ export default function HomePage() {
                 <button
                   onClick={() => setSquadView('Squad')}
                   style={{
-                    padding: '8px 20px', borderRadius: '20px', border: `1px solid ${colors.gold}`,
-                    background: squadView === 'Squad' ? colors.gold : 'transparent',
-                    color: squadView === 'Squad' ? '#111' : colors.gold,
+                    padding: '8px 20px', borderRadius: '20px', border: 'none',
+                    background: squadView === 'Squad' ? gradient : colors.white,
+                    color: squadView === 'Squad' ? 'white' : colors.purple,
                     cursor: 'pointer', fontWeight: 'bold', fontSize: '13px',
+                    boxShadow: '0 2px 8px rgba(124,58,237,0.15)',
                   }}
                 >
                   Full Squad
@@ -185,13 +190,13 @@ export default function HomePage() {
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '18px' }}>
                   {coaches.map((c) => (
-                    <div key={c.id} style={glassCard}>
+                    <div key={c.id} style={card}>
                       {c.photo_url ? (
-                        <img src={c.photo_url} alt={c.name} style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 10px', display: 'block', border: `2px solid ${colors.gold}` }} />
+                        <img src={c.photo_url} alt={c.name} style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 10px', display: 'block' }} />
                       ) : (
-                        <div style={{ width: '76px', height: '76px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🧑‍🏫</div>
+                        <div style={{ width: '76px', height: '76px', borderRadius: '50%', background: gradient, margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}>🧑‍🏫</div>
                       )}
-                      <p style={{ fontWeight: 'bold', fontSize: '15px', margin: '4px 0 2px' }}>{c.name}</p>
+                      <p style={{ fontWeight: 'bold', fontSize: '15px', margin: '4px 0 2px', color: colors.darkBlue }}>{c.name}</p>
                       <p style={{ fontSize: '13px', color: colors.muted, margin: 0 }}>{c.role || 'N/A'}</p>
                     </div>
                   ))}
