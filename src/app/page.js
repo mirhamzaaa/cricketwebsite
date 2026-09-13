@@ -19,7 +19,7 @@ export default function IntroPage() {
 
   useEffect(() => {
     // Step 1: show photo
-    const t0 = setTimeout(() => setShowPhoto(true), 200)
+    const t0 = setTimeout(() => setShowPhoto(true), 300)
 
     // Step 2: start typing name after photo appears
     const t1 = setTimeout(() => {
@@ -30,7 +30,7 @@ export default function IntroPage() {
         if (i >= developerName.length) {
           clearInterval(typeInterval)
           setDoneTyping(true)
-          setTimeout(() => setShowBio(true), 400)
+          setTimeout(() => setShowBio(true), 500)
           setTimeout(() => setShowButton(true), 1200)
         }
       }, 150)
