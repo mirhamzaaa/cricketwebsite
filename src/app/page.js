@@ -7,27 +7,39 @@ export default function IntroPage() {
   const router = useRouter()
 
   const developerName = 'Mir Hamza Manzoor'
-  const developerBio = 'Full Stack Developer & IT Boy'
+  const developerBio = 'Full Stack Developer'
   const developerPhoto = 'https://nepjpcxwowmalqwkjiee.supabase.co/storage/v1/object/sign/hamza%20photo/IMG-20250904-WA0010.jpg?token=eyJraWQiOiIyNDNjMTQ1Yy1lZDdjLTQyMjItYTc1OS0yMThlYjYxMDJhNzUiLCJhbGciOiJIUzUxMiJ9.eyJ1cmwiOiJoYW16YSBwaG90by9JTUctMjAyNTA5MDQtV0EwMDEwLmpwZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODkyMjcyODUsImV4cCI6MTgyMDc2MzI4NX0.avhdNxS1PDCwUR9cnrQPNJUTGMp5crUhO4eXKlVRs3veppq2cwqiMRwhKJVysiiI3AW-SnYDUOcP_XBCW6VUaQ'
   const whatsappLink = 'https://wa.me/923558396496'
 
+  const [showPhoto, setShowPhoto] = useState(false)
   const [typedName, setTypedName] = useState('')
+  const [doneTyping, setDoneTyping] = useState(false)
   const [showBio, setShowBio] = useState(false)
   const [showButton, setShowButton] = useState(false)
 
   useEffect(() => {
-    let i = 0
-    const typeInterval = setInterval(() => {
-      i++
-      setTypedName(developerName.slice(0, i))
-      if (i >= developerName.length) {
-        clearInterval(typeInterval)
-        setTimeout(() => setShowBio(true), 200)
-        setTimeout(() => setShowButton(true), 700)
-      }
-    }, 80)
+    // Step 1: show photo
+    const t0 = setTimeout(() => setShowPhoto(true), 200)
 
-    return () => clearInterval(typeInterval)
+    // Step 2: start typing name after photo appears
+    const t1 = setTimeout(() => {
+      let i = 0
+      const typeInterval = setInterval(() => {
+        i++
+        setTypedName(developerName.slice(0, i))
+        if (i >= developerName.length) {
+          clearInterval(typeInterval)
+          setDoneTyping(true)
+          setTimeout(() => setShowBio(true), 400)
+          setTimeout(() => setShowButton(true), 1200)
+        }
+      }, 150)
+    }, 1000)
+
+    return () => {
+      clearTimeout(t0)
+      clearTimeout(t1)
+    }
   }, [])
 
   return (
@@ -42,6 +54,11 @@ export default function IntroPage() {
           from { opacity: 0; transform: translateY(24px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes photoPop {
+          0% { opacity: 0; transform: scale(0.6) rotate(-8deg); }
+          60% { opacity: 1; transform: scale(1.08) rotate(3deg); }
+          100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
         @keyframes popIn {
           0% { opacity: 0; transform: scale(0.7) translateY(20px); }
           60% { opacity: 1; transform: scale(1.08) translateY(-4px); }
@@ -51,16 +68,11 @@ export default function IntroPage() {
           0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); }
           50% { box-shadow: 0 0 0 16px rgba(124,58,237,0); }
         }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        .photo-in { animation: fadeSlideUp 0.7s ease both; }
-        .bio-in { animation: fadeSlideUp 0.6s ease both; }
-        .btn-in { animation: popIn 0.6s ease both, pulseGlow 2.4s infinite 0.6s; }
+        .photo-in { animation: photoPop 1.1s ease both; }
+        .bio-in { animation: fadeSlideUp 1s ease both; }
+        .btn-in { animation: popIn 0.9s ease both, pulseGlow 2.8s infinite 0.9s; }
         .btn-in:hover { transform: scale(1.06); }
-        .cursor { animation: blink 0.8s step-end infinite; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(50px); animation: floatBlob 10s ease-in-out infinite; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(50px); animation: floatBlob 14s ease-in-out infinite; }
       `}</style>
 
       <main style={{
@@ -77,24 +89,25 @@ export default function IntroPage() {
         textAlign: 'center',
       }}>
         <div className="blob" style={{ width: '260px', height: '260px', background: '#7C3AED', opacity: 0.25, top: '-60px', left: '-60px' }} />
-        <div className="blob" style={{ width: '300px', height: '300px', background: '#EC4899', opacity: 0.2, bottom: '-80px', right: '-60px', animationDelay: '2s' }} />
-        <div className="blob" style={{ width: '200px', height: '200px', background: '#3B82F6', opacity: 0.2, top: '40%', right: '10%', animationDelay: '4s' }} />
+        <div className="blob" style={{ width: '300px', height: '300px', background: '#EC4899', opacity: 0.2, bottom: '-80px', right: '-60px', animationDelay: '3s' }} />
+        <div className="blob" style={{ width: '200px', height: '200px', background: '#3B82F6', opacity: 0.2, top: '40%', right: '10%', animationDelay: '6s' }} />
 
-        <img
-          className="photo-in"
-          src={developerPhoto}
-          alt={developerName}
-          style={{
-            position: 'relative', zIndex: 1,
-            width: '130px', height: '130px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 20%',
-            marginBottom: '22px', border: '4px solid white',
-            boxShadow: '0 8px 30px rgba(124,58,237,0.25)',
-          }}
-        />
+        {showPhoto && (
+          <img
+            className="photo-in"
+            src={developerPhoto}
+            alt={developerName}
+            style={{
+              position: 'relative', zIndex: 1,
+              width: '130px', height: '130px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 20%',
+              marginBottom: '22px', border: '4px solid white',
+              boxShadow: '0 8px 30px rgba(124,58,237,0.25)',
+            }}
+          />
+        )}
 
         <h1 style={{ position: 'relative', zIndex: 1, fontSize: '30px', fontWeight: 'bold', margin: '0 0 8px', color: '#1E1B4B', minHeight: '40px' }}>
           {typedName}
-          <span className="cursor" style={{ color: '#7C3AED' }}>|</span>
         </h1>
 
         {showBio && (
